@@ -60,23 +60,31 @@ body {
 /* ── Mode toggle ── */
 .mode-bar {
   display: flex;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.42);
+  background: rgba(255,255,255,0.06);
   border-radius: 30px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.18);
 }
 .mode-btn {
-  padding: 9px 22px;
-  font-size: 12px;
+  padding: 10px 24px;
+  font-size: 12.5px;
   border: none;
   background: transparent;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.78);
   cursor: pointer;
   font-family: inherit;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.3px;
   transition: all 0.25s;
 }
 .mode-btn.active { background: white; color: var(--green-dark); border-radius: 30px; }
+body.admin-mode .mode-bar {
+  border-color: rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.03);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
 
 /* ── Phone frame ── */
 .phone-wrap {
@@ -1114,6 +1122,308 @@ body.admin-mode .callout {
   .callout::before, .callout::after { display: none; }
 }
 
+/* ── Pitch summary (30-second owner takeaway) ── */
+.pitch-summary {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(201, 168, 76, 0.45);
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(4px);
+}
+.ps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.ps-col { padding-left: 12px; border-left: 2px solid var(--gold); }
+.ps-tag {
+  color: var(--gold);
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+.ps-text {
+  color: rgba(255,255,255,0.92);
+  font-size: 12px;
+  line-height: 1.55;
+}
+.ps-text strong { color: white; font-weight: 600; }
+body.admin-mode .pitch-summary {
+  background: white;
+  border-color: rgba(201, 168, 76, 0.55);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+body.admin-mode .ps-text { color: var(--text-dark); }
+body.admin-mode .ps-text strong { color: var(--green-dark); }
+body.admin-mode .ps-tag { color: #B8860B; }
+@media (max-width: 700px) {
+  .ps-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* ── Mode hint under toggle ── */
+.mode-hint {
+  color: rgba(255,255,255,0.55);
+  font-size: 10px;
+  margin-bottom: 18px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+body.admin-mode .mode-hint { color: rgba(0,0,0,0.45); }
+
+/* ── Step 5 hand-off CTA in narration ── */
+.narr-cta {
+  margin-top: 12px;
+  background: var(--gold);
+  color: var(--green-dark);
+  border: none;
+  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+  letter-spacing: 0.3px;
+  transition: transform 0.1s, background 0.15s;
+  box-shadow: 0 3px 10px rgba(201, 168, 76, 0.25);
+}
+.narr-cta:hover { background: #D9B85F; }
+.narr-cta:active { transform: scale(0.98); }
+.narr-cta.hidden { display: none; }
+
+/* ── Admin tabs ── */
+.admin-tabs {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.admin-tab {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-mid);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.admin-tab:hover { background: var(--green-pale); }
+.admin-tab.active {
+  background: var(--green-mid);
+  color: white;
+  box-shadow: 0 2px 8px rgba(46, 139, 87, 0.3);
+}
+
+.pane { display: flex; flex-direction: column; gap: 10px; }
+.pane.hidden { display: none; }
+
+/* ── Schedule pane ── */
+.sched-header {
+  background: linear-gradient(135deg, var(--gold-light), white);
+  border-radius: 12px;
+  padding: 14px 18px;
+  border-left: 3px solid var(--gold);
+}
+.sched-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--green-dark);
+  letter-spacing: 0.3px;
+}
+.sched-sub {
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 3px;
+}
+.sched-calendar-wrap {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.sched-cal {
+  width: 280px;
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: none;
+  border: 0.5px solid var(--border);
+}
+
+.sched-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.sched-card-head {
+  background: var(--green-mid);
+  padding: 13px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sched-card-title { color: white; font-size: 15px; font-weight: 700; }
+.sched-card-sub { color: rgba(255,255,255,0.75); font-size: 11px; margin-top: 2px; }
+.sched-edit-tag {
+  background: var(--gold);
+  color: var(--green-dark);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 11px;
+  letter-spacing: 0.5px;
+}
+
+.slot-block {
+  padding: 14px 18px;
+  border-bottom: 0.5px solid var(--border);
+}
+.slot-head {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 10px;
+}
+.slot-rows { display: flex; flex-direction: column; gap: 8px; }
+.slot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sr-k { color: var(--text-light); flex-shrink: 0; min-width: 76px; }
+.sr-v { color: var(--text-dark); font-weight: 600; }
+.sr-unit { color: var(--text-light); font-weight: 400; font-size: 11px; }
+.sr-control { display: flex; align-items: center; gap: 8px; }
+.qty-btn {
+  width: 26px; height: 26px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--green-mid);
+  font-weight: 700;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qty-btn:hover { background: var(--green-pale); border-color: var(--green-mid); }
+.qty-btn:active { transform: scale(0.92); }
+.qty-val {
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+.slot-tag {
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 9px;
+  font-weight: 600;
+  margin-left: 4px;
+}
+.slot-tag.full { background: var(--green-pale); color: var(--green-mid); }
+.slot-tag.low { background: #FEF0E8; color: #B85C10; }
+
+.month-rules {
+  padding: 14px 18px;
+  background: #FAF7F0;
+  border-bottom: 0.5px solid var(--border);
+}
+.month-rules-label {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-light);
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.rule-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  padding: 5px 0;
+}
+.rule-row.policy-row { display: block; padding: 8px 0 0; }
+.rule-k { color: var(--text-mid); }
+.rule-v { color: var(--text-dark); font-weight: 600; }
+.check-on { color: var(--green-mid); font-size: 14px; margin-right: 4px; }
+.own-tag {
+  background: var(--gold);
+  color: var(--green-dark);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 7px;
+  margin-left: 6px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.policy-text {
+  background: white;
+  border: 0.5px solid var(--border);
+  border-radius: 7px;
+  padding: 9px 11px;
+  font-size: 11.5px;
+  color: var(--text-mid);
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.5;
+}
+.edit-link {
+  background: white;
+  color: var(--green-mid);
+  border: 1px solid var(--green-mid);
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.edit-link:hover { background: var(--green-pale); }
+.save-btn {
+  width: calc(100% - 36px);
+  margin: 14px 18px 18px;
+  background: var(--green-mid);
+  color: white;
+  border: none;
+  border-radius: 9px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 3px 10px rgba(46, 139, 87, 0.25);
+  transition: transform 0.1s;
+}
+.save-btn:active { transform: scale(0.98); }
+
 /* Utility */
 .hidden { display: none; }
 .screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -1128,11 +1438,30 @@ body.admin-mode .callout {
   <p class="subtitle">Sun City Golf Club × 數位預約升級方案</p>
 </div>
 
+<!-- 30-second pitch summary -->
+<div class="pitch-summary">
+  <div class="ps-grid">
+    <div class="ps-col">
+      <div class="ps-tag">解決什麼</div>
+      <div class="ps-text"><strong>假日電話接不停</strong>、客人放鳥、訂金收不到、月底對帳手抄到眼花</div>
+    </div>
+    <div class="ps-col">
+      <div class="ps-tag">這套做什麼</div>
+      <div class="ps-text">球友 LINE 自助報名 → 訂金 LINE Pay 自動收 → 後台一鍵匯出 Excel <strong>對接您現有 ERP</strong></div>
+    </div>
+    <div class="ps-col">
+      <div class="ps-tag">下一步</div>
+      <div class="ps-text">歡迎約 30 分鐘現場聊聊，<strong>免費評估您球場專屬版本</strong></div>
+    </div>
+  </div>
+</div>
+
 <!-- Mode toggle -->
 <div class="mode-bar">
-  <button class="mode-btn active" id="btn-user" onclick="setMode('user')">⛳ 球友端體驗</button>
-  <button class="mode-btn" id="btn-admin" onclick="setMode('admin')">📋 管理端</button>
+  <button class="mode-btn active" id="btn-user" onclick="setMode('user')">📱 球友端</button>
+  <button class="mode-btn" id="btn-admin" onclick="setMode('admin')">🖥 球場端</button>
 </div>
+<p class="mode-hint">兩個視角看完，才是完整故事</p>
 
 <!-- ═══════════ USER FLOW ═══════════ -->
 <div class="screen" id="screen-user">
@@ -1189,6 +1518,7 @@ body.admin-mode .callout {
       <div class="narr-tag">畫面說明</div>
       <div class="narr-title" id="narr-title"></div>
       <div class="narr-desc" id="narr-desc"></div>
+      <button class="narr-cta hidden" id="narr-cta" onclick="setMode('admin','today')"></button>
     </div>
 
     <!-- Callouts (absolute, beside phone) -->
@@ -1219,6 +1549,120 @@ body.admin-mode .callout {
         <span class="dash-status">● 連線中</span>
       </div>
 
+      <!-- Admin tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="tab-schedule" onclick="setAdminTab('schedule')">📅 場次設定</button>
+        <button class="admin-tab" id="tab-today" onclick="setAdminTab('today')">📋 今日預約</button>
+      </div>
+
+      <!-- ── Schedule pane (場次設定) ── -->
+      <div class="pane" id="pane-schedule">
+        <div class="sched-header">
+          <h3 class="sched-title">📅 場次設定</h3>
+          <p class="sched-sub">您決定每天開放幾組、會員/散客分別收多少、訂金與取消規則——系統只執行您的規則</p>
+        </div>
+
+        <div class="sched-calendar-wrap">
+          <div class="cal-card sched-cal">
+            <div class="cal-head">
+              <span class="cal-nav">‹</span>
+              <span class="cal-month">2026 年 5 月</span>
+              <span class="cal-nav">›</span>
+            </div>
+            <div class="cal-weekdays">
+              <span class="we">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="we">六</span>
+            </div>
+            <div class="cal-grid" id="sched-cal-grid"></div>
+            <div class="cal-foot">點選日期編輯場次（早 = 早場組數 · 午 = 午場組數）</div>
+          </div>
+        </div>
+
+        <div class="sched-card">
+          <div class="sched-card-head">
+            <div>
+              <div class="sched-card-title">5月2日（六）</div>
+              <div class="sched-card-sub">假日 · 大草坪場</div>
+            </div>
+            <span class="sched-edit-tag">編輯中</span>
+          </div>
+
+          <div class="slot-block">
+            <div class="slot-head">⛅ 早場 · 07:00 開球</div>
+            <div class="slot-rows">
+              <div class="slot-row">
+                <span class="sr-k">開放組數</span>
+                <div class="sr-control">
+                  <button class="qty-btn" onclick="bumpQty('am',-1)">−</button>
+                  <span class="qty-val" id="qty-am">5</span>
+                  <button class="qty-btn" onclick="bumpQty('am',1)">+</button>
+                  <span class="slot-tag full">🟢 已額滿</span>
+                </div>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">會員價</span>
+                <span class="sr-v">NT$ 3,000 <span class="sr-unit">/ 人</span></span>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">散客價</span>
+                <span class="sr-v">NT$ 3,500 <span class="sr-unit">/ 人</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="slot-block">
+            <div class="slot-head">☀️ 午場 · 12:30 開球</div>
+            <div class="slot-rows">
+              <div class="slot-row">
+                <span class="sr-k">開放組數</span>
+                <div class="sr-control">
+                  <button class="qty-btn" onclick="bumpQty('pm',-1)">−</button>
+                  <span class="qty-val" id="qty-pm">3</span>
+                  <button class="qty-btn" onclick="bumpQty('pm',1)">+</button>
+                  <span class="slot-tag low">剩 1 組</span>
+                </div>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">會員價</span>
+                <span class="sr-v">NT$ 2,800 <span class="sr-unit">/ 人</span></span>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">散客價</span>
+                <span class="sr-v">NT$ 3,200 <span class="sr-unit">/ 人</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="month-rules">
+            <div class="month-rules-label">─── 全月通用設定 ───</div>
+            <div class="rule-row">
+              <span class="rule-k">訂金</span>
+              <span class="rule-v">NT$ 2,000 <span class="sr-unit">/ 組（不分人頭）</span></span>
+            </div>
+            <div class="rule-row">
+              <span class="rule-k">額滿時</span>
+              <span class="rule-v"><span class="check-on">☑</span>自動關閉報名</span>
+            </div>
+            <div class="rule-row policy-row">
+              <span class="rule-k">取消規則 <span class="own-tag">您球場專屬</span></span>
+              <div class="policy-text">
+                <span>7 天前全退 · 3–6 天退 50% · 2 天內或未到場不退款</span>
+                <button class="edit-link">編輯</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="save-btn">✓ 儲存設定</button>
+        </div>
+
+        <div class="narration" style="width:100%;">
+          <div class="narr-tag">球場老闆視角</div>
+          <div class="narr-title">您是控場的人</div>
+          <div class="narr-desc">每一天的早場/午場開幾組、會員與散客分別收多少、訂金多少、取消怎麼退——全部由您決定。系統只負責執行您的規則，不會把任何條件硬塞給您。設定完成後球友端會即時反映，組數滿了自動關閉報名。</div>
+        </div>
+      </div>
+
+      <!-- ── Today pane (今日預約 — existing content) ── -->
+      <div class="pane hidden" id="pane-today">
       <!-- Session header -->
       <div class="a-card">
         <div class="a-head">
@@ -1287,6 +1731,7 @@ body.admin-mode .callout {
         <div class="narr-title">球場工作人員視角</div>
         <div class="narr-desc">櫃台或工作人員從電腦／平板登入後台，看到當日場次的即時報名概況。客人到場時開「📷 掃碼核銷」鏡頭對準客人 LINE 的 QR Code，訂金自動抵扣，餘額可選現金 / 信用卡 / LINE Pay 收款。當日結束後一鍵匯出 Excel 匯入 ERP。</div>
       </div>
+      </div><!-- /pane-today -->
     </div>
 
     <!-- Admin callouts -->
@@ -1435,7 +1880,11 @@ const steps = [
     ],
   },
   {
-    narr: { title:'⑤ 電子憑證（含 QR Code）', desc:'付款成功後，系統自動把電子憑證推送到球友的 LINE。球友到場只需出示這張 QR Code 即可入場，免帶紙本。' },
+    narr: {
+      title:'⑤ 電子憑證（含 QR Code）',
+      desc:'付款成功後，系統自動把電子憑證推送到球友的 LINE。球友到場只需出示這張 QR Code 即可入場，免帶紙本。',
+      cta:'→ 看球場後台怎麼處理這筆預約'
+    },
     hl: null,
     annotations: [
       { side: 'right', y: 110, text: '🎫 報名成功電子憑證\n自動發送到 LINE' },
@@ -1563,7 +2012,7 @@ function depositCard() {
         <span class="tl">應付訂金</span>
         <span class="ta">NT$2,000</span>
       </div>
-      <div class="cancel-note">⚠️ 開打前 7 天以上全退 · 3–6 天退 50% · 2 天內或未到場不退款</div>
+      <div class="cancel-note">⚠️ 山溪地退款規則：開打前 7 天以上全退 · 3–6 天退 50% · 2 天內或未到場不退款</div>
       <button class="lp-btn" onclick="nextStep()">
         <span class="lp-logo">LINE Pay</span> 立即付款
       </button>
@@ -1648,6 +2097,13 @@ function renderStep() {
   // Narration
   document.getElementById('narr-title').textContent = s.narr.title;
   document.getElementById('narr-desc').textContent = s.narr.desc;
+  const ctaBtn = document.getElementById('narr-cta');
+  if (s.narr.cta) {
+    ctaBtn.textContent = s.narr.cta;
+    ctaBtn.classList.remove('hidden');
+  } else {
+    ctaBtn.classList.add('hidden');
+  }
 
   // Dots
   document.getElementById('dots').innerHTML = steps.map((_,i) =>
@@ -1674,13 +2130,65 @@ function prevStep() { if (cur > 0) { cur--; renderStep(); } }
 function rmTap(t) { if (t === 'sessions') nextStep(); }
 
 /* ─── Mode switch ─── */
-function setMode(mode) {
+function setMode(mode, tab) {
   const isUser = mode === 'user';
   document.getElementById('screen-user').className = 'screen' + (isUser ? '' : ' hidden');
   document.getElementById('screen-admin').className = 'screen' + (isUser ? ' hidden' : '');
   document.getElementById('btn-user').className = 'mode-btn' + (isUser ? ' active' : '');
   document.getElementById('btn-admin').className = 'mode-btn' + (isUser ? '' : ' active');
   document.body.classList.toggle('admin-mode', !isUser);
+  if (!isUser) {
+    setAdminTab(tab || 'schedule');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function setAdminTab(tab) {
+  const isSched = tab === 'schedule';
+  document.getElementById('pane-schedule').classList.toggle('hidden', !isSched);
+  document.getElementById('pane-today').classList.toggle('hidden', isSched);
+  document.getElementById('tab-schedule').classList.toggle('active', isSched);
+  document.getElementById('tab-today').classList.toggle('active', !isSched);
+  // Side annotations are positioned for the today pane only
+  const lc = document.getElementById('admin-callouts-left');
+  const rc = document.getElementById('admin-callouts-right');
+  if (lc) lc.style.display = isSched ? 'none' : '';
+  if (rc) rc.style.display = isSched ? 'none' : '';
+}
+
+function bumpQty(slot, delta) {
+  const el = document.getElementById('qty-' + slot);
+  if (!el) return;
+  const next = Math.max(0, Math.min(20, parseInt(el.textContent, 10) + delta));
+  el.textContent = next;
+}
+
+function buildSchedCal() {
+  const cells = [
+    null,null,null,null,null,
+    [1,3,2],[2,2,1,'edit'],
+    [3,1,1],[4,2,0],[5,1,0],[6,2,1],[7,0,1],[8,1,2],[9,3,0],
+    [10,2,1],[11,1,0],[12,0,0],[13,2,0],[14,1,1],[15,2,1],[16,2,1],
+    [17,1,1],[18,1,0],[19,0,0],[20,1,0],[21,2,0],[22,1,1],[23,2,1],
+    [24,1,0],[25,0,0],[26,0,0],[27,1,0],[28,2,1],[29,1,0],[30,2,1],
+    [31,1,1],null,null,null,null,null,null,
+  ];
+  const html = cells.map((c,i) => {
+    if (!c) return '<div class="cal-day empty"></div>';
+    const [d, am, pm, flag] = c;
+    const dow = i % 7;
+    const we = (dow === 0 || dow === 6) ? ' we' : '';
+    const tgt = flag === 'edit' ? ' target' : '';
+    const has = (am > 0 || pm > 0) ? ' has' : '';
+    let slot;
+    if (am > 0 && pm > 0) slot = `<span class="d-slots">早${am} 午${pm}</span>`;
+    else if (am > 0)     slot = `<span class="d-slots">早${am}</span>`;
+    else if (pm > 0)     slot = `<span class="d-slots">午${pm}</span>`;
+    else                 slot = '<span class="d-none">—</span>';
+    return `<button class="cal-day${we}${has}${tgt}"><span class="d-num">${d}</span>${slot}</button>`;
+  }).join('');
+  const grid = document.getElementById('sched-cal-grid');
+  if (grid) grid.innerHTML = html;
 }
 
 /* ─── Admin: render players ─── */
@@ -1796,6 +2304,7 @@ const adminAnnotations = [
 /* ─── Init ─── */
 renderStep();
 renderPlayers();
+buildSchedCal();
 renderCallouts(adminAnnotations, 'admin-callouts-left', 'admin-callouts-right');
 </script>
 </body>
