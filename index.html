@@ -85,6 +85,7 @@ body {
   align-items: center;
   width: 100%;
   max-width: 360px;
+  position: relative;
 }
 .phone {
   width: 320px;
@@ -571,7 +572,7 @@ body {
 .narr-desc { color: rgba(255,255,255,0.65); font-size: 11px; line-height: 1.6; }
 
 /* ── Admin Panel ── */
-.admin { width: 320px; display: flex; flex-direction: column; gap: 8px; }
+.admin { width: 320px; display: flex; flex-direction: column; gap: 8px; position: relative; }
 .a-card { background: white; border-radius: 12px; overflow: hidden; }
 .a-head {
   background: var(--green-mid);
@@ -966,6 +967,88 @@ body.admin-mode .erp-note { color: rgba(0,0,0,0.45); }
   white-space: nowrap;
 }
 
+/* Annotation callouts */
+.callouts-side {
+  position: absolute;
+  top: 12px;
+  width: 210px;
+  pointer-events: none;
+  z-index: 10;
+}
+.callouts-side.left {
+  right: 100%;
+  margin-right: 40px;
+}
+.callouts-side.right {
+  left: 100%;
+  margin-left: 40px;
+}
+.callout {
+  position: absolute;
+  width: 100%;
+  background: rgba(255,255,255,0.97);
+  color: var(--green-dark);
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  font-weight: 500;
+  pointer-events: auto;
+  white-space: pre-line;
+  animation: calloutIn 0.4s ease;
+}
+.callouts-side.right .callout { border-left: 3px solid var(--gold); }
+.callouts-side.left .callout {
+  border-right: 3px solid var(--gold);
+  text-align: right;
+}
+.callout::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  width: 34px;
+  border-top: 1.5px dashed var(--gold);
+}
+.callouts-side.right .callout::before { left: -36px; }
+.callouts-side.left .callout::before { right: -36px; }
+.callout::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.3);
+}
+.callouts-side.right .callout::after { left: -42px; }
+.callouts-side.left .callout::after { right: -42px; }
+body.admin-mode .callout {
+  background: white;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+}
+@keyframes calloutIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (max-width: 950px) {
+  .callouts-side {
+    position: static;
+    width: 320px;
+    margin: 14px auto 0;
+  }
+  .callouts-side .callout {
+    position: static;
+    width: 100%;
+    margin-bottom: 8px;
+    text-align: left !important;
+    border-left: 3px solid var(--gold) !important;
+    border-right: none !important;
+  }
+  .callout::before, .callout::after { display: none; }
+}
+
 /* Utility */
 .hidden { display: none; }
 .screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -1042,6 +1125,10 @@ body.admin-mode .erp-note { color: rgba(0,0,0,0.45); }
       <div class="narr-title" id="narr-title"></div>
       <div class="narr-desc" id="narr-desc"></div>
     </div>
+
+    <!-- Callouts (absolute, beside phone) -->
+    <div class="callouts-side left" id="callouts-left"></div>
+    <div class="callouts-side right" id="callouts-right"></div>
   </div>
 </div>
 
@@ -1116,6 +1203,10 @@ body.admin-mode .erp-note { color: rgba(0,0,0,0.45); }
       <div class="narr-title">球場工作人員視角</div>
       <div class="narr-desc">客人到場時，工作人員開「📷 掃碼核銷」鏡頭（手機或櫃台平板皆可），對準客人 LINE 中的 QR Code 自動帶出訂位資訊。訂金自動抵扣，餘額可選現金 / 信用卡 / LINE Pay 收款。匯出 Excel 後可直接匯入 ERP 系統。</div>
     </div>
+
+    <!-- Admin callouts -->
+    <div class="callouts-side left" id="admin-callouts-left"></div>
+    <div class="callouts-side right" id="admin-callouts-right"></div>
 
     <!-- Scan modal -->
     <div class="scan-overlay hidden" id="scan-overlay" onclick="if(event.target===this)closeScan()">
@@ -1206,6 +1297,10 @@ const steps = [
     narr: { title:'① 歡迎訊息 + Rich Menu', desc:'球友加入官方帳號後，收到歡迎訊息，底部出現快捷選單。點「查看場次」即開始報名流程。' },
     hl: null,
     next: '查看場次 →',
+    annotations: [
+      { side: 'right', y: 105, text: '⛳ 加入山溪地官方 LINE\n自動推送歡迎訊息' },
+      { side: 'right', y: 510, text: '🔘 Rich Menu — 底部固定選單\n常用功能一鍵到達' },
+    ],
     build: () => [
       divider('2026年4月27日'),
       bot('您好！歡迎來到\n山溪地高爾夫球場 ⛳\n\n請使用下方選單選擇服務，或點「查看場次」立即報名！'),
@@ -1215,6 +1310,10 @@ const steps = [
     narr: { title:'② 月曆 — 選擇預約日期', desc:'系統以月曆呈現可預約日期，每一天下方標示「早球 N 組 / 午球 N 組」剩餘狀況。球友直接點選想去的日期，即可進入下一步。' },
     hl: 'sessions',
     next: '選擇場次 →',
+    annotations: [
+      { side: 'right', y: 130, text: '📅 月曆呈現可預約日期\n每日標示「早 N 組 / 午 N 組」' },
+      { side: 'left', y: 240, text: '✨ 5/2 金色脈動\n推薦點選的示範日期' },
+    ],
     build: () => [
       divider('2026年4月27日'),
       bot('您好！歡迎來到\n山溪地高爾夫球場 ⛳\n\n請使用下方選單選擇服務，或點「查看場次」立即報名！'),
@@ -1226,6 +1325,10 @@ const steps = [
     narr: { title:'③ 填寫報名資料', desc:'選定場次後填入姓名、電話、人數，系統即時計算訂金（NT$500/人）。資料已預填 LINE 個人資訊，更省事。' },
     hl: null,
     next: '確認送出 →',
+    annotations: [
+      { side: 'right', y: 145, text: '✏️ 姓名 / 電話 LINE 內直接輸入\n憑證會送到本人手機' },
+      { side: 'left', y: 310, text: '💰 1 組訂金 NT$2,000\n（1–4 人都一樣，不分人頭）' },
+    ],
     build: () => [
       usr('報名 5/2 早場'),
       bot('請填寫以下報名資訊：'),
@@ -1236,6 +1339,10 @@ const steps = [
     narr: { title:'④ 訂金確認與 LINE Pay 付款', desc:'系統顯示明細後，球友直接在 LINE 內完成付款，全程不需跳出 App，轉換率大幅提升。取消規則清楚說明。' },
     hl: null,
     next: 'LINE Pay 付款 →',
+    annotations: [
+      { side: 'right', y: 145, text: '📋 訂金明細\n到場可抵擊球費' },
+      { side: 'left', y: 340, text: '💳 LINE Pay 付款\n不跳出 LINE，轉換率高' },
+    ],
     build: () => [
       usr(`確認報名 — ${formState.name} × ${formState.pax}人`),
       bot('✅ 確認完成，請支付訂金：'),
@@ -1246,6 +1353,11 @@ const steps = [
     narr: { title:'⑤ 電子憑證（含 QR Code）', desc:'付款成功後自動發送電子憑證。球友到場出示 QR Code，工作人員一鍵核銷，完全取代紙本記錄。' },
     hl: null,
     next: '查看管理端 →',
+    annotations: [
+      { side: 'right', y: 110, text: '🎫 報名成功電子憑證\n自動發送到 LINE' },
+      { side: 'left', y: 250, text: '📞 留聯繫電話\n颱風假時球場主動通知' },
+      { side: 'right', y: 380, text: '📲 QR Code\n到場掃碼核銷用' },
+    ],
     isLast: true,
     build: () => [
       usr('（LINE Pay 付款完成）'),
@@ -1470,6 +1582,9 @@ function renderStep() {
     nextBtn.textContent = s.next || '繼續 →';
     nextBtn.onclick = nextStep;
   }
+
+  // Annotations
+  renderCallouts(s.annotations, 'callouts-left', 'callouts-right');
 }
 
 function nextStep() { if (cur < steps.length - 1) { cur++; renderStep(); } }
@@ -1576,9 +1691,31 @@ function completeScanPayment(method) {
   }, 1600);
 }
 
+/* ─── Annotation callouts ─── */
+function renderCallouts(annotations, leftId, rightId) {
+  const left  = (annotations || []).filter(a => a.side === 'left');
+  const right = (annotations || []).filter(a => a.side !== 'left');
+  const buildHtml = arr => arr.map(a =>
+    `<div class="callout" style="top:${a.y}px;">${a.text}</div>`
+  ).join('');
+  const lEl = document.getElementById(leftId);
+  const rEl = document.getElementById(rightId);
+  if (lEl) lEl.innerHTML = buildHtml(left);
+  if (rEl) rEl.innerHTML = buildHtml(right);
+}
+
+const adminAnnotations = [
+  { side: 'right', y: 90,  text: '🖥 整頁變米色 + 上方 dash-bar\n模式不同一眼可見' },
+  { side: 'left',  y: 220, text: '📊 即時統計\n總人數 / 已核銷 / 待到場 / 未付款' },
+  { side: 'right', y: 360, text: '📷 掃碼核銷 / 結帳\n手機或櫃台平板都能用' },
+  { side: 'left',  y: 560, text: '📋 報名名單即時更新\n含付款狀態，可手動補核銷' },
+  { side: 'right', y: 800, text: '📥 Excel 一鍵匯出\n含必要欄位匯入 ERP 系統' },
+];
+
 /* ─── Init ─── */
 renderStep();
 renderPlayers();
+renderCallouts(adminAnnotations, 'admin-callouts-left', 'admin-callouts-right');
 </script>
 </body>
 </html>
