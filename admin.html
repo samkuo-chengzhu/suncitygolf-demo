@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>山溪地高爾夫 × LINE Bot 預約系統｜球友端</title>
+<title>山溪地高爾夫 × LINE Bot 預約系統｜球場端</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1376,7 +1376,7 @@ body.admin-mode .callout {
 .screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
 </style>
 </head>
-<body>
+<body class="admin-mode">
 
 <!-- Brand header -->
 <div class="brand-header">
@@ -1387,388 +1387,435 @@ body.admin-mode .callout {
 
 <!-- Mode toggle (links to two separate pages) -->
 <div class="mode-bar">
-  <a class="mode-btn active" href="./">📱 球友端</a>
-  <a class="mode-btn" href="admin.html">🖥 球場端</a>
+  <a class="mode-btn" href="./">📱 球友端</a>
+  <a class="mode-btn active" href="admin.html">🖥 球場端</a>
 </div>
 
-<!-- ═══════════ USER FLOW ═══════════ -->
-<div class="screen" id="screen-user">
-  <div class="phone-wrap">
-    <div class="phone">
-      <div class="phone-screen">
-        <div class="status-bar">
-          <div class="notch-area"></div>
-          <span style="font-size:9px; opacity:0;">9:41</span>
-          <span style="font-size:9px; opacity:0;">···</span>
+<div class="screen" id="screen-admin">
+  <div class="admin">
+    <!-- Mac-like window chrome -->
+    <div class="admin-chrome">
+      <span class="ac-dot red"></span>
+      <span class="ac-dot yellow"></span>
+      <span class="ac-dot green"></span>
+      <div class="ac-url">suncitygolf.app/admin/sessions/2026-05-02</div>
+    </div>
+
+    <div class="admin-body">
+      <!-- Admin top bar -->
+      <div class="dash-bar">
+        <span class="dash-icon">🖥</span>
+        <div class="dash-text">
+          <div class="dash-title">山溪地 · 管理後台</div>
+          <div class="dash-sub">櫃台 · 王小明 值班中</div>
         </div>
-        <div class="line-header">
-          <div class="line-avatar">⛳</div>
-          <div>
-            <div class="line-name">山溪地高爾夫球場</div>
-            <div class="line-sub">官方帳號</div>
+        <span class="dash-status">● 連線中</span>
+      </div>
+
+      <!-- Admin tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab active" id="tab-schedule" onclick="setAdminTab('schedule')">📅 場次設定</button>
+        <button class="admin-tab" id="tab-today" onclick="setAdminTab('today')">📋 今日預約</button>
+      </div>
+
+      <!-- ── Schedule pane (場次設定) ── -->
+      <div class="pane" id="pane-schedule">
+        <div class="sched-header">
+          <h3 class="sched-title">📅 場次設定</h3>
+          <p class="sched-sub">您決定每天開放幾組、會員/散客分別收多少、訂金與取消規則——系統只執行您的規則</p>
+        </div>
+
+        <div class="sched-calendar-wrap">
+          <div class="cal-card sched-cal">
+            <div class="cal-head">
+              <span class="cal-nav">‹</span>
+              <span class="cal-month">2026 年 5 月</span>
+              <span class="cal-nav">›</span>
+            </div>
+            <div class="cal-weekdays">
+              <span class="we">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="we">六</span>
+            </div>
+            <div class="cal-grid" id="sched-cal-grid"></div>
+            <div class="cal-foot">點選日期編輯場次（早 = 早場組數 · 午 = 午場組數）</div>
           </div>
-          <div class="line-icons">
-            <span>🔍</span><span>☰</span>
+        </div>
+
+        <div class="sched-card">
+          <div class="sched-card-head">
+            <div>
+              <div class="sched-card-title">5月2日（六）</div>
+              <div class="sched-card-sub">假日 · 大草坪場</div>
+            </div>
+            <span class="sched-edit-tag">編輯中</span>
           </div>
+
+          <div class="slot-block">
+            <div class="slot-head">⛅ 早場 · 07:00 開球</div>
+            <div class="slot-rows">
+              <div class="slot-row">
+                <span class="sr-k">開放組數</span>
+                <div class="sr-control">
+                  <button class="qty-btn" onclick="bumpQty('am',-1)">−</button>
+                  <span class="qty-val" id="qty-am">5</span>
+                  <button class="qty-btn" onclick="bumpQty('am',1)">+</button>
+                  <span class="slot-tag full">🟢 已額滿</span>
+                </div>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">會員價</span>
+                <span class="sr-v">NT$ 3,000 <span class="sr-unit">/ 人</span></span>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">散客價</span>
+                <span class="sr-v">NT$ 3,500 <span class="sr-unit">/ 人</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="slot-block">
+            <div class="slot-head">☀️ 午場 · 12:30 開球</div>
+            <div class="slot-rows">
+              <div class="slot-row">
+                <span class="sr-k">開放組數</span>
+                <div class="sr-control">
+                  <button class="qty-btn" onclick="bumpQty('pm',-1)">−</button>
+                  <span class="qty-val" id="qty-pm">3</span>
+                  <button class="qty-btn" onclick="bumpQty('pm',1)">+</button>
+                  <span class="slot-tag low">剩 1 組</span>
+                </div>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">會員價</span>
+                <span class="sr-v">NT$ 2,800 <span class="sr-unit">/ 人</span></span>
+              </div>
+              <div class="slot-row">
+                <span class="sr-k">散客價</span>
+                <span class="sr-v">NT$ 3,200 <span class="sr-unit">/ 人</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="month-rules">
+            <div class="month-rules-label">─── 全月通用設定 ───</div>
+            <div class="rule-row">
+              <span class="rule-k">訂金</span>
+              <span class="rule-v">NT$ 2,000 <span class="sr-unit">/ 組（不分人頭）</span></span>
+            </div>
+            <div class="rule-row">
+              <span class="rule-k">額滿時</span>
+              <span class="rule-v"><span class="check-on">☑</span>自動關閉報名</span>
+            </div>
+            <div class="rule-row policy-row">
+              <span class="rule-k">取消規則 <span class="own-tag">您球場專屬</span></span>
+              <div class="policy-text">
+                <span>7 天前全退 · 3–6 天退 50% · 2 天內或未到場不退款</span>
+                <button class="edit-link">編輯</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="save-btn">✓ 儲存設定</button>
         </div>
 
-        <!-- Chat -->
-        <div class="chat" id="chat"></div>
-
-        <!-- Input bar -->
-        <div class="input-bar">
-          <span style="font-size:16px;color:#999;">😊</span>
-          <div class="input-mock">Aa</div>
-          <span style="font-size:16px;color:#999;">🎤</span>
-          <div class="send-circle">＋</div>
+        <div class="narration" style="width:100%;">
+          <div class="narr-tag">球場老闆視角</div>
+          <div class="narr-title">您是控場的人</div>
+          <div class="narr-desc">每一天的早場/午場開幾組、會員與散客分別收多少、訂金多少、取消怎麼退——全部由您決定。系統只負責執行您的規則，不會把任何條件硬塞給您。設定完成後球友端會即時反映，組數滿了自動關閉報名。</div>
         </div>
+      </div>
 
-        <!-- Rich Menu -->
-        <div class="rich-menu">
-          <div class="rm-grid">
-            <button class="rm-btn" id="rm-sessions" onclick="rmTap('sessions')"><span class="rm-icon">⛳</span>查看場次</button>
-            <button class="rm-btn" id="rm-booking" onclick="rmTap('booking')"><span class="rm-icon">📋</span>我的預約</button>
-            <button class="rm-btn" id="rm-contact" onclick="rmTap('contact')"><span class="rm-icon">📞</span>聯絡我們</button>
+      <!-- ── Today pane (今日預約 — existing content) ── -->
+      <div class="pane hidden" id="pane-today">
+      <!-- Session header -->
+      <div class="a-card">
+        <div class="a-head">
+          <div class="a-head-left">
+            <div class="a-session">⛳ 早場 18洞標準賽</div>
+            <div class="a-date">2026年5月2日（六） 07:00 開球</div>
+          </div>
+          <div class="a-badge-open">進行中</div>
+        </div>
+        <div class="a-stats">
+          <div class="a-stat">
+            <div class="a-stat-num" id="stat-total">12</div>
+            <div class="a-stat-label">總人數</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num" id="stat-ci">7</div>
+            <div class="a-stat-label">已核銷</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num amber" id="stat-paid">3</div>
+            <div class="a-stat-label">待到場</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num blue" id="stat-pend">2</div>
+            <div class="a-stat-label">未付款</div>
           </div>
         </div>
       </div>
+
+      <!-- Deposit total -->
+      <div class="dep-summary">
+        <span class="ds-label">💰 已收訂金總計</span>
+        <span class="ds-amount">NT$ 5,000</span>
+      </div>
+
+      <!-- Scan check-in CTA -->
+      <button class="scan-cta-btn" onclick="openScan()">
+        <span style="font-size:16px;">📷</span>
+        掃碼核銷 / 結帳
+      </button>
+
+      <div class="section-label">報名名單</div>
+
+      <!-- Player table -->
+      <div class="player-table">
+        <div class="player-thead">
+          <div></div>
+          <div>球友姓名</div>
+          <div>人數</div>
+          <div>訂金</div>
+          <div>狀態</div>
+          <div></div>
+        </div>
+        <div id="player-list"></div>
+      </div>
+
+      <!-- Export -->
+      <button class="export-btn" id="export-btn" onclick="doExport()">
+        <span>📊</span> 匯出 Excel — 匯入 ERP 系統
+      </button>
+      <div class="erp-note">格式：.xlsx · 含姓名、電話、場次、訂金金額、到場狀態</div>
+
+      <!-- Narration -->
+      <div class="narration" style="width:100%;">
+        <div class="narr-tag">管理端說明</div>
+        <div class="narr-title">球場工作人員視角</div>
+        <div class="narr-desc">櫃台或工作人員從電腦／平板登入後台，看到當日場次的即時報名概況。客人到場時開「📷 掃碼核銷」鏡頭對準客人 LINE 的 QR Code，訂金自動抵扣，餘額可選現金 / 信用卡 / LINE Pay 收款。當日結束後一鍵匯出 Excel 匯入 ERP。</div>
+      </div>
+      </div><!-- /pane-today -->
     </div>
 
-    <!-- Step navigation -->
-    <div class="step-nav">
-      <button class="s-btn prev" id="prev-btn" onclick="prevStep()">← 返回</button>
-      <div class="dots" id="dots"></div>
-      <button class="s-btn next" id="next-btn" onclick="nextStep()">繼續 →</button>
-    </div>
+    <!-- Admin callouts -->
+    <div class="callouts-side left" id="admin-callouts-left"></div>
+    <div class="callouts-side right" id="admin-callouts-right"></div>
 
-    <!-- Narration -->
-    <div class="narration" id="narration">
-      <div class="narr-tag">畫面說明</div>
-      <div class="narr-title" id="narr-title"></div>
-      <div class="narr-desc" id="narr-desc"></div>
-      <button class="narr-cta hidden" id="narr-cta" onclick="window.location='admin.html?tab=today'"></button>
-    </div>
+    <!-- Scan modal -->
+    <div class="scan-overlay hidden" id="scan-overlay" onclick="if(event.target===this)closeScan()">
+      <div class="scan-pane" data-pane="scan">
+        <div class="scan-head">
+          <span class="scan-title">📷 掃碼核銷</span>
+          <span class="scan-close" onclick="closeScan()">✕</span>
+        </div>
+        <div class="scan-frame">
+          <div class="vf-corners">
+            <div class="vfc tl"></div><div class="vfc tr"></div>
+            <div class="vfc bl"></div><div class="vfc br"></div>
+            <div class="vf-laser"></div>
+          </div>
+        </div>
+        <p class="scan-hint">請客人開啟 LINE → 我的預約<br>對準 QR Code 掃描中…</p>
+      </div>
 
-    <!-- Callouts (absolute, beside phone) -->
-    <div class="callouts-side left" id="callouts-left"></div>
-    <div class="callouts-side right" id="callouts-right"></div>
+      <div class="scan-pane hidden" data-pane="detail">
+        <div class="scan-head">
+          <span class="scan-title">✓ 已掃描</span>
+          <span class="scan-close" onclick="closeScan()">✕</span>
+        </div>
+        <div class="detail-body">
+          <div class="dt-avatar">張</div>
+          <h3 class="dt-name">張偉強</h3>
+          <p class="dt-sub">5/2（六）早場 18洞 · 07:00 開球</p>
+          <div class="dt-rows">
+            <div class="dt-row"><span class="k">人數</span><span class="v">2 人</span></div>
+            <div class="dt-row"><span class="k">已付訂金</span><span class="v" style="color:var(--green-mid);">NT$2,000</span></div>
+            <div class="dt-row"><span class="k">訂單編號</span><span class="v" style="font-family:monospace;font-size:11px;">SG260502-0038</span></div>
+          </div>
+        </div>
+        <button class="scan-cta-action" onclick="advanceScan('settle')">確認核銷 → 進入結帳</button>
+      </div>
+
+      <div class="scan-pane hidden" data-pane="settle">
+        <div class="scan-head">
+          <span class="scan-title">💰 結帳</span>
+          <span class="scan-close" onclick="closeScan()">✕</span>
+        </div>
+        <div class="settle-body">
+          <div class="st-row"><span class="k">擊球費（假日）NT$3,500 × 2</span><span class="v">NT$7,000</span></div>
+          <div class="st-row"><span class="k">已付訂金抵扣（1 組）</span><span class="v" style="color:var(--green-mid);">−NT$2,000</span></div>
+          <div class="st-row balance">
+            <span class="k">應收餘額</span>
+            <span class="v"><strong>NT$5,000</strong></span>
+          </div>
+        </div>
+        <p class="pm-label">選擇付款方式</p>
+        <div class="pm-grid">
+          <button class="pm-btn" onclick="completeScanPayment('cash')"><span class="pm-icon">💵</span>現金</button>
+          <button class="pm-btn" onclick="completeScanPayment('card')"><span class="pm-icon">💳</span>信用卡</button>
+          <button class="pm-btn" onclick="completeScanPayment('linepay')"><span class="pm-icon">📱</span>LINE Pay</button>
+        </div>
+      </div>
+
+      <div class="scan-pane hidden" data-pane="success">
+        <div class="success-icon">✓</div>
+        <h3 class="success-title">結帳完成</h3>
+        <p class="success-name">張偉強 × 2人</p>
+        <p class="success-amount">NT$5,000</p>
+        <p class="success-method" id="success-method">現金</p>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 /* ─── Data ─── */
-let formState = { name: '林志明', phone: '0912-345-678', pax: 4 };
-
-const DEPOSIT_PER_GROUP = 2000;
-const GREEN_FEE_PER_PERSON = 3500;
-
-/* ─── Steps ─── */
-const steps = [
-  {
-    narr: { title:'① 歡迎訊息 + Rich Menu', desc:'球友加入官方帳號後，收到歡迎訊息，底部出現快捷選單。點「查看場次」即開始報名流程。' },
-    hl: null,
-    next: '查看場次 →',
-    annotations: [
-      { side: 'right', y: 105, text: '⛳ 加入山溪地官方 LINE\n自動推送歡迎訊息' },
-      { side: 'right', y: 510, text: '🔘 Rich Menu — 底部固定選單\n常用功能一鍵到達' },
-    ],
-    build: () => [
-      divider('2026年4月27日'),
-      bot('您好！歡迎來到\n山溪地高爾夫球場 ⛳\n\n請使用下方選單選擇服務，或點「查看場次」立即報名！'),
-    ],
-  },
-  {
-    narr: { title:'② 月曆 — 選擇預約日期', desc:'系統以月曆呈現可預約日期，每一天下方標示「早球 N 組 / 午球 N 組」剩餘狀況。球友直接點選想去的日期，即可進入下一步。' },
-    hl: 'sessions',
-    next: '選擇場次 →',
-    annotations: [
-      { side: 'right', y: 130, text: '📅 月曆呈現可預約日期\n每日標示「早 N 組 / 午 N 組」' },
-      { side: 'left', y: 240, text: '✨ 5/2 金色脈動\n推薦點選的示範日期' },
-    ],
-    build: () => [
-      divider('2026年4月27日'),
-      bot('您好！歡迎來到\n山溪地高爾夫球場 ⛳\n\n請使用下方選單選擇服務，或點「查看場次」立即報名！'),
-      usr('查看場次'),
-      cardWrap(calendarCard()),
-    ],
-  },
-  {
-    narr: { title:'③ 填寫報名資料', desc:'選定場次後填入姓名、電話、人數，系統即時計算訂金（NT$500/人）。資料已預填 LINE 個人資訊，更省事。' },
-    hl: null,
-    next: '確認送出 →',
-    annotations: [
-      { side: 'right', y: 145, text: '✏️ 姓名 / 電話 LINE 內直接輸入\n憑證會送到本人手機' },
-      { side: 'left', y: 310, text: '💰 1 組訂金 NT$2,000\n（1–4 人都一樣，不分人頭）' },
-    ],
-    build: () => [
-      usr('報名 5/2 早場'),
-      bot('請填寫以下報名資訊：'),
-      cardWrap(formCard()),
-    ],
-  },
-  {
-    narr: { title:'④ 訂金確認與 LINE Pay 付款', desc:'系統顯示明細後，球友直接在 LINE 內完成付款，全程不需跳出 App，轉換率大幅提升。取消規則清楚說明。' },
-    hl: null,
-    next: 'LINE Pay 付款 →',
-    annotations: [
-      { side: 'right', y: 145, text: '📋 訂金明細\n到場可抵擊球費' },
-      { side: 'left', y: 340, text: '💳 LINE Pay 付款\n不跳出 LINE，轉換率高' },
-    ],
-    build: () => [
-      usr(`確認報名 — ${formState.name} × ${formState.pax}人`),
-      bot('✅ 確認完成，請支付訂金：'),
-      cardWrap(depositCard()),
-    ],
-  },
-  {
-    narr: {
-      title:'⑤ 電子憑證（含 QR Code）',
-      desc:'付款成功後，系統自動把電子憑證推送到球友的 LINE。球友到場只需出示這張 QR Code 即可入場，免帶紙本。',
-      cta:'→ 看球場後台怎麼處理這筆預約'
-    },
-    hl: null,
-    annotations: [
-      { side: 'right', y: 110, text: '🎫 報名成功電子憑證\n自動發送到 LINE' },
-      { side: 'left', y: 250, text: '📞 留聯繫電話\n颱風假時球場主動通知' },
-      { side: 'right', y: 380, text: '📲 QR Code\n到場出示即可入場' },
-    ],
-    isLast: true,
-    build: () => [
-      usr('（LINE Pay 付款完成）'),
-      bot('🎉 報名成功！您的電子憑證：'),
-      cardWrap(voucherCard()),
-    ],
-  },
+const players = [
+  { name:'林志明', init:'林', count:4, deposit:2000, status:'checkin' },
+  { name:'王建國', init:'王', count:2, deposit:2000, status:'checkin' },
+  { name:'陳美華', init:'陳', count:2, deposit:2000, status:'checkin' },
+  { name:'張偉強', init:'張', count:2, deposit:2000, status:'paid' },
+  { name:'劉明宏', init:'劉', count:2, deposit:2000, status:'paid' },
+  { name:'黃志豪', init:'黃', count:2, deposit: 0,   status:'pending' },
 ];
 
-let cur = 0;
-
-/* ─── HTML builders ─── */
-function divider(t) {
-  return `<div class="date-div fadein">${t}</div>`;
-}
-function bot(t) {
-  return `<div class="msg-row bot fadein">
-    <div class="b-avatar">⛳</div>
-    <div class="bubble bot">${t.replace(/\n/g,'<br>')}</div>
-  </div>`;
-}
-function usr(t) {
-  return `<div class="msg-row user fadein"><div class="bubble user">${t}</div></div>`;
-}
-function cardWrap(inner) {
-  return `<div class="card-wrap fadein"><div class="card-sp"></div>${inner}</div>`;
+/* ─── Admin tab switch ─── */
+function setAdminTab(tab) {
+  const isSched = tab === 'schedule';
+  document.getElementById('pane-schedule').classList.toggle('hidden', !isSched);
+  document.getElementById('pane-today').classList.toggle('hidden', isSched);
+  document.getElementById('tab-schedule').classList.toggle('active', isSched);
+  document.getElementById('tab-today').classList.toggle('active', !isSched);
+  // Side annotations are positioned for the today pane only
+  const lc = document.getElementById('admin-callouts-left');
+  const rc = document.getElementById('admin-callouts-right');
+  if (lc) lc.style.display = isSched ? 'none' : '';
+  if (rc) rc.style.display = isSched ? 'none' : '';
 }
 
-function calendarCard() {
-  // 2026年5月：1日為週五。每筆 [day, am組數, pm組數, flag?]；null = 空白格
+function bumpQty(slot, delta) {
+  const el = document.getElementById('qty-' + slot);
+  if (!el) return;
+  const next = Math.max(0, Math.min(20, parseInt(el.textContent, 10) + delta));
+  el.textContent = next;
+}
+
+function buildSchedCal() {
   const cells = [
     null,null,null,null,null,
-    [1,3,2],[2,2,1,'tgt'],
+    [1,3,2],[2,2,1,'edit'],
     [3,1,1],[4,2,0],[5,1,0],[6,2,1],[7,0,1],[8,1,2],[9,3,0],
     [10,2,1],[11,1,0],[12,0,0],[13,2,0],[14,1,1],[15,2,1],[16,2,1],
     [17,1,1],[18,1,0],[19,0,0],[20,1,0],[21,2,0],[22,1,1],[23,2,1],
     [24,1,0],[25,0,0],[26,0,0],[27,1,0],[28,2,1],[29,1,0],[30,2,1],
     [31,1,1],null,null,null,null,null,null,
   ];
-  const cellHtml = cells.map((c,i) => {
+  const html = cells.map((c,i) => {
     if (!c) return '<div class="cal-day empty"></div>';
     const [d, am, pm, flag] = c;
     const dow = i % 7;
     const we = (dow === 0 || dow === 6) ? ' we' : '';
-    const tgt = flag === 'tgt' ? ' target' : '';
+    const tgt = flag === 'edit' ? ' target' : '';
     const has = (am > 0 || pm > 0) ? ' has' : '';
     let slot;
     if (am > 0 && pm > 0) slot = `<span class="d-slots">早${am} 午${pm}</span>`;
     else if (am > 0)     slot = `<span class="d-slots">早${am}</span>`;
     else if (pm > 0)     slot = `<span class="d-slots">午${pm}</span>`;
     else                 slot = '<span class="d-none">—</span>';
-    const click = (am > 0 || pm > 0) ? 'onclick="nextStep()"' : '';
-    return `<button class="cal-day${we}${has}${tgt}" ${click}><span class="d-num">${d}</span>${slot}</button>`;
+    return `<button class="cal-day${we}${has}${tgt}"><span class="d-num">${d}</span>${slot}</button>`;
   }).join('');
-  return `<div class="cal-card">
-    <div class="cal-head">
-      <span class="cal-nav">‹</span>
-      <span class="cal-month">2026 年 5 月</span>
-      <span class="cal-nav">›</span>
-    </div>
-    <div class="cal-weekdays">
-      <span class="we">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="we">六</span>
-    </div>
-    <div class="cal-grid">${cellHtml}</div>
-    <div class="cal-foot">點選日期查看時段（早 = 早球組數 · 午 = 午球組數）</div>
-  </div>`;
+  const grid = document.getElementById('sched-cal-grid');
+  if (grid) grid.innerHTML = html;
 }
 
-function formCard() {
-  const sel = (n) => formState.pax === n ? ' sel' : '';
-  return `<div class="form-card">
-    <div class="form-head">
-      <p>⛳ 5月2日早場報名</p>
-      <small>07:00 開球 · 18洞標準賽</small>
-    </div>
-    <div class="form-body">
-      <div>
-        <div class="f-label">姓名</div>
-        <input class="f-input" type="text" value="${formState.name}" oninput="updateForm('name', this.value)" placeholder="請填寫您的姓名" />
-      </div>
-      <div>
-        <div class="f-label">聯繫電話</div>
-        <input class="f-input" type="tel" value="${formState.phone}" oninput="updateForm('phone', this.value)" placeholder="0912-345-678" />
-      </div>
-      <div>
-        <div class="f-label">報名人數</div>
-        <div class="pax-row">
-          <button class="pax-btn${sel(1)}" onclick="setPax(1,this)">1</button>
-          <button class="pax-btn${sel(2)}" onclick="setPax(2,this)">2</button>
-          <button class="pax-btn${sel(3)}" onclick="setPax(3,this)">3</button>
-          <button class="pax-btn${sel(4)}" onclick="setPax(4,this)">4</button>
-        </div>
-      </div>
-      <div class="deposit-preview">1 組訂金（含最多 4 人）：<strong>NT$2,000</strong></div>
-      <button class="fc-cta" onclick="nextStep()">確認報名</button>
-    </div>
-  </div>`;
-}
-
-function setPax(n, el) {
-  formState.pax = n;
-  document.querySelectorAll('.pax-btn').forEach(b => b.classList.remove('sel'));
-  el.classList.add('sel');
-}
-
-function updateForm(field, val) {
-  formState[field] = val;
-}
-
-function depositCard() {
-  return `<div class="dep-card">
-    <div class="dep-head"><span>💳</span><p>訂金付款確認</p></div>
-    <div class="dep-body">
-      <div class="dep-row"><span class="k">場次</span><span class="v">5/2（六）早場 18洞</span></div>
-      <div class="dep-row"><span class="k">報名人數</span><span class="v">${formState.pax} 人（1 組）</span></div>
-      <div class="dep-row"><span class="k">訂金</span><span class="v">NT$2,000 / 組</span></div>
-      <div class="dep-row"><span class="k">抵扣方式</span><span class="v" style="color:var(--green-mid);">✓ 到場抵擊球費</span></div>
-      <div class="dep-total">
-        <span class="tl">應付訂金</span>
-        <span class="ta">NT$2,000</span>
-      </div>
-      <div class="cancel-note">⚠️ 山溪地退款規則：開打前 7 天以上全退 · 3–6 天退 50% · 2 天內或未到場不退款</div>
-      <button class="lp-btn" onclick="nextStep()">
-        <span class="lp-logo">LINE Pay</span> 立即付款
-      </button>
-    </div>
-  </div>`;
-}
-
-function voucherCard() {
-  return `<div class="voucher">
-    <div class="vc-top">
-      <div class="vc-check">✓</div>
-      <h3>報名成功！</h3>
-      <p>山溪地高爾夫俱樂部</p>
-    </div>
-    <div class="vc-mid">
-      <div class="vc-row"><span class="k">場次</span><span class="v">5/2（六）早場 07:00</span></div>
-      <div class="vc-row"><span class="k">球道</span><span class="v">18洞標準賽</span></div>
-      <div class="vc-row"><span class="k">球友</span><span class="v">${formState.name}</span></div>
-      <div class="vc-row"><span class="k">聯繫電話</span><span class="v">${formState.phone}</span></div>
-      <div class="vc-row"><span class="k">人數</span><span class="v">${formState.pax} 人</span></div>
-      <div class="vc-row"><span class="k">已付訂金</span><span class="v" style="color:var(--green-mid);">NT$2,000</span></div>
-      <div class="vc-row"><span class="k">訂單編號</span><span class="v" style="font-family:monospace;font-size:9px;">SG260502-0042</span></div>
-    </div>
-    <div class="vc-qr">
-      <svg width="72" height="72" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg">
-        <rect width="21" height="21" fill="white"/>
-        <rect x="1" y="1" width="7" height="7" fill="none" stroke="#1A1A1A" stroke-width="1"/>
-        <rect x="3" y="3" width="3" height="3" fill="#1A1A1A"/>
-        <rect x="13" y="1" width="7" height="7" fill="none" stroke="#1A1A1A" stroke-width="1"/>
-        <rect x="15" y="3" width="3" height="3" fill="#1A1A1A"/>
-        <rect x="1" y="13" width="7" height="7" fill="none" stroke="#1A1A1A" stroke-width="1"/>
-        <rect x="3" y="15" width="3" height="3" fill="#1A1A1A"/>
-        <rect x="9" y="1" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="11" y="2" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="3" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="11" y="5" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="7" width="1" height="2" fill="#1A1A1A"/>
-        <rect x="11" y="8" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="1" y="9" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="5" y="9" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="9" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="13" y="9" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="17" y="9" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="1" y="11" width="4" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="11" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="13" y="11" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="15" y="11" width="3" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="13" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="11" y="13" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="15" y="13" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="19" y="13" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="15" width="3" height="1" fill="#1A1A1A"/>
-        <rect x="17" y="15" width="3" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="17" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="13" y="17" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="17" y="17" width="1" height="1" fill="#1A1A1A"/>
-        <rect x="9" y="19" width="2" height="1" fill="#1A1A1A"/>
-        <rect x="13" y="19" width="3" height="1" fill="#1A1A1A"/>
-        <rect x="19" y="19" width="1" height="1" fill="#1A1A1A"/>
-      </svg>
-      <p>到場出示此 QR Code 完成核銷</p>
-    </div>
-    <div class="vc-foot">
-      <p>新竹縣關西鎮玉山里2鄰13號</p>
-      <strong>03-5476-288</strong>
-    </div>
-  </div>`;
-}
-
-/* ─── Render step ─── */
-function renderStep() {
-  const s = steps[cur];
-  document.getElementById('chat').innerHTML = s.build().join('');
-
-  // Rich menu highlight
-  document.querySelectorAll('.rm-btn').forEach(b => b.classList.remove('hl'));
-  if (s.hl) {
-    const btn = document.getElementById('rm-' + s.hl);
-    if (btn) btn.classList.add('hl');
-  }
-
-  // Narration
-  document.getElementById('narr-title').textContent = s.narr.title;
-  document.getElementById('narr-desc').textContent = s.narr.desc;
-  const ctaBtn = document.getElementById('narr-cta');
-  if (s.narr.cta) {
-    ctaBtn.textContent = s.narr.cta;
-    ctaBtn.classList.remove('hidden');
-  } else {
-    ctaBtn.classList.add('hidden');
-  }
-
-  // Dots
-  document.getElementById('dots').innerHTML = steps.map((_,i) =>
-    `<div class="dot ${i===cur?'active':i<cur?'done':''}"></div>`
+/* ─── Admin: render players ─── */
+function renderPlayers() {
+  const list = document.getElementById('player-list');
+  list.innerHTML = players.map((p, i) => `
+    <div class="player-card fadein">
+      <div class="p-avatar">${p.init}</div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-pax">${p.count} 人</div>
+      <div class="p-deposit ${p.deposit === 0 ? 'unpaid' : ''}">${p.deposit > 0 ? 'NT$'+p.deposit.toLocaleString() : '未付款'}</div>
+      <span class="p-status ${p.status==='checkin'?'s-done':p.status==='paid'?'s-paid':'s-pending'}">
+        ${p.status==='checkin'?'✓ 已核銷':p.status==='paid'?'已付款':'未付款'}
+      </span>
+      ${p.status==='paid' ? `<button class="ci-btn" onclick="checkin(${i})">核銷</button>` : '<div></div>'}
+    </div>`
   ).join('');
 
-  // Nav
-  const prevBtn = document.getElementById('prev-btn');
-  const nextBtn = document.getElementById('next-btn');
-  prevBtn.style.visibility = cur === 0 ? 'hidden' : 'visible';
-  nextBtn.style.visibility = s.isLast ? 'hidden' : 'visible';
-
-  if (!s.isLast) {
-    nextBtn.textContent = s.next || '繼續 →';
-    nextBtn.onclick = nextStep;
-  }
-
-  // Annotations
-  renderCallouts(s.annotations, 'callouts-left', 'callouts-right');
+  // Update stats
+  const ci = players.filter(p=>p.status==='checkin').reduce((s,p)=>s+p.count,0);
+  const pd = players.filter(p=>p.status==='paid').reduce((s,p)=>s+p.count,0);
+  const pe = players.filter(p=>p.status==='pending').reduce((s,p)=>s+p.count,0);
+  const totalDep = players.reduce((s,p)=>s+p.deposit,0);
+  document.getElementById('stat-ci').textContent = ci;
+  document.getElementById('stat-paid').textContent = pd;
+  document.getElementById('stat-pend').textContent = pe;
+  const dsAmt = document.querySelector('.ds-amount');
+  if (dsAmt) dsAmt.textContent = `NT$ ${totalDep.toLocaleString()}`;
 }
 
-function nextStep() { if (cur < steps.length - 1) { cur++; renderStep(); } }
-function prevStep() { if (cur > 0) { cur--; renderStep(); } }
-function rmTap(t) { if (t === 'sessions') nextStep(); }
+function checkin(i) {
+  players[i].status = 'checkin';
+  renderPlayers();
+}
+
+function doExport() {
+  const btn = document.getElementById('export-btn');
+  btn.innerHTML = '✅ SG_20260502.xlsx 已匯出！';
+  btn.style.background = 'var(--green-pale)';
+  btn.style.borderColor = 'var(--green-mid)';
+  setTimeout(() => {
+    btn.innerHTML = '<span>📊</span> 匯出 Excel — 匯入 ERP 系統';
+    btn.style.background = 'white';
+    btn.style.borderColor = 'var(--green-mid)';
+  }, 3000);
+}
+
+/* ─── Scan / Check-in flow ─── */
+let scanStep = 'scan';
+let scanTimer = null;
+
+function openScan() {
+  scanStep = 'scan';
+  document.getElementById('scan-overlay').classList.remove('hidden');
+  renderScanPane();
+  if (scanTimer) clearTimeout(scanTimer);
+  scanTimer = setTimeout(() => { if (scanStep === 'scan') advanceScan('detail'); }, 1900);
+}
+
+function closeScan() {
+  document.getElementById('scan-overlay').classList.add('hidden');
+  if (scanTimer) clearTimeout(scanTimer);
+  scanStep = 'scan';
+  renderScanPane();
+}
+
+function advanceScan(next) {
+  scanStep = next;
+  renderScanPane();
+}
+
+function renderScanPane() {
+  document.querySelectorAll('.scan-pane').forEach(p => {
+    p.classList.toggle('hidden', p.dataset.pane !== scanStep);
+  });
+}
+
+function completeScanPayment(method) {
+  const labels = { cash: '現金 結帳', card: '信用卡 結帳', linepay: 'LINE Pay 結帳' };
+  document.getElementById('success-method').textContent = labels[method] || '';
+  if (players[3]) players[3].status = 'checkin';
+  scanStep = 'success';
+  renderScanPane();
+  setTimeout(() => {
+    document.getElementById('scan-overlay').classList.add('hidden');
+    renderPlayers();
+    scanStep = 'scan';
+    renderScanPane();
+  }, 1600);
+}
 
 /* ─── Annotation callouts ─── */
 function renderCallouts(annotations, leftId, rightId) {
@@ -1783,8 +1830,21 @@ function renderCallouts(annotations, leftId, rightId) {
   if (rEl) rEl.innerHTML = buildHtml(right);
 }
 
+const adminAnnotations = [
+  { side: 'right', y: 25,  text: '🖥 桌面/平板後台\n櫃台從電腦或 iPad 登入\n跟球友的 LINE 手機畫面區隔' },
+  { side: 'left',  y: 180, text: '📊 即時統計\n總人數 / 已核銷 / 待到場 / 未付款' },
+  { side: 'right', y: 320, text: '📷 掃碼核銷 / 結帳\n客人到場直接掃 QR Code' },
+  { side: 'left',  y: 560, text: '📋 報名名單表格\n含付款狀態，可手動補核銷' },
+  { side: 'right', y: 790, text: '📥 Excel 一鍵匯出\n含必要欄位，可直接匯入 ERP' },
+];
+
 /* ─── Init ─── */
-renderStep();
+const _params = new URLSearchParams(window.location.search);
+const _initialTab = _params.get('tab') === 'today' ? 'today' : 'schedule';
+renderPlayers();
+buildSchedCal();
+setAdminTab(_initialTab);
+renderCallouts(adminAnnotations, 'admin-callouts-left', 'admin-callouts-right');
 </script>
 </body>
 </html>
