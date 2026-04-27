@@ -571,70 +571,133 @@ body {
 .narr-title { color: white; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .narr-desc { color: rgba(255,255,255,0.65); font-size: 11px; line-height: 1.6; }
 
-/* ── Admin Panel ── */
-.admin { width: 320px; display: flex; flex-direction: column; gap: 8px; position: relative; }
-.a-card { background: white; border-radius: 12px; overflow: hidden; }
+/* ── Admin Panel (desktop dashboard) ── */
+.admin {
+  width: 100%;
+  max-width: 640px;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 38px rgba(0,0,0,0.18);
+  position: relative;
+}
+
+/* Mac-like browser chrome */
+.admin-chrome {
+  background: #E8E8E8;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.08);
+}
+.ac-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.ac-dot.red { background: #FF5F57; }
+.ac-dot.yellow { background: #FEBC2E; }
+.ac-dot.green { background: #28C840; }
+.ac-url {
+  flex: 1;
+  background: white;
+  border-radius: 5px;
+  padding: 4px 14px;
+  font-size: 11px;
+  color: var(--text-mid);
+  text-align: center;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  margin-left: 6px;
+}
+
+/* Admin body */
+.admin-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #F2EDE0;
+}
+
+.a-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
 .a-head {
   background: var(--green-mid);
-  padding: 11px 14px;
+  padding: 13px 18px;
   display: flex; justify-content: space-between; align-items: flex-start;
 }
-.a-head-left { }
-.a-head-left .a-session { color: white; font-size: 13px; font-weight: 600; }
-.a-head-left .a-date { color: rgba(255,255,255,0.8); font-size: 10px; margin-top: 2px; }
+.a-head-left .a-session { color: white; font-size: 15px; font-weight: 600; }
+.a-head-left .a-date { color: rgba(255,255,255,0.8); font-size: 11px; margin-top: 3px; }
 .a-badge-open {
   background: rgba(255,255,255,0.2);
   color: white;
-  font-size: 9px;
-  padding: 3px 8px;
-  border-radius: 10px;
+  font-size: 10px;
+  padding: 4px 11px;
+  border-radius: 11px;
   font-weight: 500;
 }
-.a-stats {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: 0;
-  border-top: 0.5px solid rgba(255,255,255,0.1);
-}
+.a-stats { display: grid; grid-template-columns: repeat(4,1fr); }
 .a-stat {
-  padding: 8px;
+  padding: 14px 8px;
   text-align: center;
   border-right: 0.5px solid var(--border);
 }
 .a-stat:last-child { border-right: none; }
-.a-stat-num { font-size: 17px; font-weight: 700; color: var(--green-mid); }
+.a-stat-num { font-size: 22px; font-weight: 700; color: var(--green-mid); }
 .a-stat-num.amber { color: #C9853A; }
 .a-stat-num.blue { color: #2B6CB0; }
-.a-stat-label { font-size: 8px; color: var(--text-light); margin-top: 1px; }
+.a-stat-label { font-size: 10px; color: var(--text-light); margin-top: 3px; }
 
 /* Deposit summary bar */
 .dep-summary {
   background: white;
-  border-radius: 10px;
-  padding: 10px 14px;
+  border-radius: 12px;
+  padding: 14px 20px;
   display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
-.dep-summary .ds-label { font-size: 11px; color: var(--text-mid); }
-.dep-summary .ds-amount { font-size: 17px; font-weight: 700; color: var(--green-mid); }
+.dep-summary .ds-label { font-size: 13px; color: var(--text-mid); }
+.dep-summary .ds-amount { font-size: 22px; font-weight: 700; color: var(--green-mid); }
 
 /* Section label */
 .section-label {
-  color: rgba(255,255,255,0.5);
+  color: var(--text-light);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  padding: 0 2px;
+  padding: 4px 2px 0;
+  font-weight: 600;
 }
 
-/* Player cards */
-.player-card {
+/* Player table (desktop style) */
+.player-table {
   background: white;
-  border-radius: 10px;
-  padding: 9px 12px;
-  display: flex; align-items: center; gap: 9px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
+.player-thead {
+  background: #FAF7F0;
+  padding: 10px 16px;
+  display: grid;
+  grid-template-columns: 32px 1fr 56px 110px 90px 64px;
+  gap: 10px;
+  align-items: center;
+  font-size: 9px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 0.5px solid var(--border);
+}
+.player-card {
+  padding: 11px 16px;
+  display: grid;
+  grid-template-columns: 32px 1fr 56px 110px 90px 64px;
+  gap: 10px;
+  align-items: center;
+  background: white;
+  border-bottom: 0.5px solid var(--border);
+}
+.player-card:last-child { border-bottom: none; }
 .p-avatar {
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   border-radius: 50%;
   background: var(--green-pale);
   display: flex; align-items: center; justify-content: center;
@@ -643,14 +706,17 @@ body {
   color: var(--green-mid);
   flex-shrink: 0;
 }
-.p-name { font-size: 12px; font-weight: 600; color: var(--text-dark); }
-.p-detail { font-size: 9px; color: var(--text-light); margin-top: 1px; }
+.p-name { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.p-pax { font-size: 12px; color: var(--text-mid); }
+.p-deposit { font-size: 12px; color: var(--text-mid); }
+.p-deposit.unpaid { color: #B85C10; font-weight: 500; }
 .p-status {
-  font-size: 9px;
-  padding: 3px 7px;
-  border-radius: 9px;
+  font-size: 10px;
+  padding: 4px 9px;
+  border-radius: 10px;
   font-weight: 500;
   white-space: nowrap;
+  justify-self: start;
 }
 .s-done { background: var(--green-mid); color: white; }
 .s-paid { background: var(--green-pale); color: var(--green-mid); }
@@ -659,9 +725,9 @@ body {
   background: var(--line-green);
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 4px 8px;
-  font-size: 10px;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
   cursor: pointer;
   white-space: nowrap;
   font-family: inherit;
@@ -674,21 +740,20 @@ body {
   color: var(--green-mid);
   border: 1.5px solid var(--green-mid);
   border-radius: 10px;
-  padding: 11px;
-  font-size: 12px;
+  padding: 13px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
   transition: all 0.2s;
 }
 .export-btn:active { transform: scale(0.98); }
 
 .erp-note {
   text-align: center;
-  color: rgba(255,255,255,0.4);
+  color: var(--text-light);
   font-size: 10px;
-  margin-top: 4px;
 }
 
 /* Fade in animation */
@@ -1135,73 +1200,93 @@ body.admin-mode .callout {
 <!-- ═══════════ ADMIN PANEL ═══════════ -->
 <div class="screen hidden" id="screen-admin">
   <div class="admin">
-    <!-- Admin top bar -->
-    <div class="dash-bar">
-      <span class="dash-icon">🖥</span>
-      <div class="dash-text">
-        <div class="dash-title">山溪地 · 管理後台</div>
-        <div class="dash-sub">櫃台 · 王小明 值班中</div>
-      </div>
-      <span class="dash-status">● 連線中</span>
+    <!-- Mac-like window chrome -->
+    <div class="admin-chrome">
+      <span class="ac-dot red"></span>
+      <span class="ac-dot yellow"></span>
+      <span class="ac-dot green"></span>
+      <div class="ac-url">suncitygolf.app/admin/sessions/2026-05-02</div>
     </div>
 
-    <!-- Session header -->
-    <div class="a-card">
-      <div class="a-head">
-        <div class="a-head-left">
-          <div class="a-session">⛳ 早場 18洞標準賽</div>
-          <div class="a-date">2026年5月2日（六） 07:00 開球</div>
+    <div class="admin-body">
+      <!-- Admin top bar -->
+      <div class="dash-bar">
+        <span class="dash-icon">🖥</span>
+        <div class="dash-text">
+          <div class="dash-title">山溪地 · 管理後台</div>
+          <div class="dash-sub">櫃台 · 王小明 值班中</div>
         </div>
-        <div class="a-badge-open">進行中</div>
+        <span class="dash-status">● 連線中</span>
       </div>
-      <div class="a-stats">
-        <div class="a-stat">
-          <div class="a-stat-num" id="stat-total">12</div>
-          <div class="a-stat-label">總人數</div>
+
+      <!-- Session header -->
+      <div class="a-card">
+        <div class="a-head">
+          <div class="a-head-left">
+            <div class="a-session">⛳ 早場 18洞標準賽</div>
+            <div class="a-date">2026年5月2日（六） 07:00 開球</div>
+          </div>
+          <div class="a-badge-open">進行中</div>
         </div>
-        <div class="a-stat">
-          <div class="a-stat-num" id="stat-ci">7</div>
-          <div class="a-stat-label">已核銷</div>
-        </div>
-        <div class="a-stat">
-          <div class="a-stat-num amber" id="stat-paid">3</div>
-          <div class="a-stat-label">待到場</div>
-        </div>
-        <div class="a-stat">
-          <div class="a-stat-num blue" id="stat-pend">2</div>
-          <div class="a-stat-label">未付款</div>
+        <div class="a-stats">
+          <div class="a-stat">
+            <div class="a-stat-num" id="stat-total">12</div>
+            <div class="a-stat-label">總人數</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num" id="stat-ci">7</div>
+            <div class="a-stat-label">已核銷</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num amber" id="stat-paid">3</div>
+            <div class="a-stat-label">待到場</div>
+          </div>
+          <div class="a-stat">
+            <div class="a-stat-num blue" id="stat-pend">2</div>
+            <div class="a-stat-label">未付款</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Deposit total -->
-    <div class="dep-summary">
-      <span class="ds-label">💰 已收訂金總計</span>
-      <span class="ds-amount">NT$ 5,000</span>
-    </div>
+      <!-- Deposit total -->
+      <div class="dep-summary">
+        <span class="ds-label">💰 已收訂金總計</span>
+        <span class="ds-amount">NT$ 5,000</span>
+      </div>
 
-    <!-- Scan check-in CTA -->
-    <button class="scan-cta-btn" onclick="openScan()">
-      <span style="font-size:16px;">📷</span>
-      掃碼核銷 / 結帳
-    </button>
+      <!-- Scan check-in CTA -->
+      <button class="scan-cta-btn" onclick="openScan()">
+        <span style="font-size:16px;">📷</span>
+        掃碼核銷 / 結帳
+      </button>
 
-    <div class="section-label">報名名單</div>
+      <div class="section-label">報名名單</div>
 
-    <!-- Player list -->
-    <div style="display:flex;flex-direction:column;gap:6px;" id="player-list"></div>
+      <!-- Player table -->
+      <div class="player-table">
+        <div class="player-thead">
+          <div></div>
+          <div>球友姓名</div>
+          <div>人數</div>
+          <div>訂金</div>
+          <div>狀態</div>
+          <div></div>
+        </div>
+        <div id="player-list"></div>
+      </div>
 
-    <!-- Export -->
-    <button class="export-btn" id="export-btn" onclick="doExport()">
-      <span>📊</span> 匯出 Excel — 匯入 ERP 系統
-    </button>
-    <div class="erp-note">格式：.xlsx · 含姓名、電話、場次、訂金金額、到場狀態</div>
+      <!-- Export -->
+      <button class="export-btn" id="export-btn" onclick="doExport()">
+        <span>📊</span> 匯出 Excel — 匯入 ERP 系統
+      </button>
+      <div class="erp-note">格式：.xlsx · 含姓名、電話、場次、訂金金額、到場狀態</div>
 
-    <!-- Narration -->
-    <div class="narration" style="width:100%;">
-      <div class="narr-tag">管理端說明</div>
-      <div class="narr-title">球場工作人員視角</div>
-      <div class="narr-desc">客人到場時，工作人員開「📷 掃碼核銷」鏡頭（手機或櫃台平板皆可），對準客人 LINE 中的 QR Code 自動帶出訂位資訊。訂金自動抵扣，餘額可選現金 / 信用卡 / LINE Pay 收款。匯出 Excel 後可直接匯入 ERP 系統。</div>
+      <!-- Narration -->
+      <div class="narration" style="width:100%;">
+        <div class="narr-tag">管理端說明</div>
+        <div class="narr-title">球場工作人員視角</div>
+        <div class="narr-desc">櫃台或工作人員從電腦／平板登入後台，看到當日場次的即時報名概況。客人到場時開「📷 掃碼核銷」鏡頭對準客人 LINE 的 QR Code，訂金自動抵扣，餘額可選現金 / 信用卡 / LINE Pay 收款。當日結束後一鍵匯出 Excel 匯入 ERP。</div>
+      </div>
     </div>
 
     <!-- Admin callouts -->
@@ -1607,14 +1692,13 @@ function renderPlayers() {
   list.innerHTML = players.map((p, i) => `
     <div class="player-card fadein">
       <div class="p-avatar">${p.init}</div>
-      <div style="flex:1;">
-        <div class="p-name">${p.name}</div>
-        <div class="p-detail">${p.count}人 · 訂金 ${p.deposit > 0 ? 'NT$'+p.deposit.toLocaleString() : '未付款'}</div>
-      </div>
+      <div class="p-name">${p.name}</div>
+      <div class="p-pax">${p.count} 人</div>
+      <div class="p-deposit ${p.deposit === 0 ? 'unpaid' : ''}">${p.deposit > 0 ? 'NT$'+p.deposit.toLocaleString() : '未付款'}</div>
       <span class="p-status ${p.status==='checkin'?'s-done':p.status==='paid'?'s-paid':'s-pending'}">
         ${p.status==='checkin'?'✓ 已核銷':p.status==='paid'?'已付款':'未付款'}
       </span>
-      ${p.status==='paid' ? `<button class="ci-btn" onclick="checkin(${i})">核銷</button>` : ''}
+      ${p.status==='paid' ? `<button class="ci-btn" onclick="checkin(${i})">核銷</button>` : '<div></div>'}
     </div>`
   ).join('');
 
@@ -1705,11 +1789,11 @@ function renderCallouts(annotations, leftId, rightId) {
 }
 
 const adminAnnotations = [
-  { side: 'right', y: 90,  text: '🖥 整頁變米色 + 上方 dash-bar\n模式不同一眼可見' },
-  { side: 'left',  y: 220, text: '📊 即時統計\n總人數 / 已核銷 / 待到場 / 未付款' },
-  { side: 'right', y: 360, text: '📷 掃碼核銷 / 結帳\n手機或櫃台平板都能用' },
-  { side: 'left',  y: 560, text: '📋 報名名單即時更新\n含付款狀態，可手動補核銷' },
-  { side: 'right', y: 800, text: '📥 Excel 一鍵匯出\n含必要欄位匯入 ERP 系統' },
+  { side: 'right', y: 25,  text: '🖥 桌面/平板後台\n櫃台從電腦或 iPad 登入\n跟球友的 LINE 手機畫面區隔' },
+  { side: 'left',  y: 180, text: '📊 即時統計\n總人數 / 已核銷 / 待到場 / 未付款' },
+  { side: 'right', y: 320, text: '📷 掃碼核銷 / 結帳\n客人到場直接掃 QR Code' },
+  { side: 'left',  y: 560, text: '📋 報名名單表格\n含付款狀態，可手動補核銷' },
+  { side: 'right', y: 790, text: '📥 Excel 一鍵匯出\n含必要欄位，可直接匯入 ERP' },
 ];
 
 /* ─── Init ─── */
