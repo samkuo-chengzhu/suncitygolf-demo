@@ -64,7 +64,7 @@ body {
   background: rgba(255,255,255,0.06);
   border-radius: 30px;
   overflow: hidden;
-  margin-bottom: 6px;
+  margin-bottom: 22px;
   box-shadow: 0 3px 14px rgba(0,0,0,0.18);
 }
 .mode-btn {
@@ -1122,59 +1122,6 @@ body.admin-mode .callout {
   .callout::before, .callout::after { display: none; }
 }
 
-/* ── Pitch summary (30-second owner takeaway) ── */
-.pitch-summary {
-  width: 100%;
-  max-width: 720px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(201, 168, 76, 0.45);
-  border-radius: 14px;
-  padding: 16px 20px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(4px);
-}
-.ps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-.ps-col { padding-left: 12px; border-left: 2px solid var(--gold); }
-.ps-tag {
-  color: var(--gold);
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-.ps-text {
-  color: rgba(255,255,255,0.92);
-  font-size: 12px;
-  line-height: 1.55;
-}
-.ps-text strong { color: white; font-weight: 600; }
-body.admin-mode .pitch-summary {
-  background: white;
-  border-color: rgba(201, 168, 76, 0.55);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-body.admin-mode .ps-text { color: var(--text-dark); }
-body.admin-mode .ps-text strong { color: var(--green-dark); }
-body.admin-mode .ps-tag { color: #B8860B; }
-@media (max-width: 700px) {
-  .ps-grid { grid-template-columns: 1fr; gap: 12px; }
-}
-
-/* ── Mode hint under toggle ── */
-.mode-hint {
-  color: rgba(255,255,255,0.55);
-  font-size: 10px;
-  margin-bottom: 18px;
-  text-align: center;
-  letter-spacing: 0.5px;
-}
-body.admin-mode .mode-hint { color: rgba(0,0,0,0.45); }
-
 /* ── Step 5 hand-off CTA in narration ── */
 .narr-cta {
   margin-top: 12px;
@@ -1438,30 +1385,11 @@ body.admin-mode .mode-hint { color: rgba(0,0,0,0.45); }
   <p class="subtitle">Sun City Golf Club × 數位預約升級方案</p>
 </div>
 
-<!-- 30-second pitch summary -->
-<div class="pitch-summary">
-  <div class="ps-grid">
-    <div class="ps-col">
-      <div class="ps-tag">解決什麼</div>
-      <div class="ps-text"><strong>假日電話接不停</strong>、客人放鳥、訂金收不到、月底對帳手抄到眼花</div>
-    </div>
-    <div class="ps-col">
-      <div class="ps-tag">這套做什麼</div>
-      <div class="ps-text">球友 LINE 自助報名 → 訂金 LINE Pay 自動收 → 後台一鍵匯出 Excel <strong>對接您現有 ERP</strong></div>
-    </div>
-    <div class="ps-col">
-      <div class="ps-tag">下一步</div>
-      <div class="ps-text">歡迎約 30 分鐘現場聊聊，<strong>免費評估您球場專屬版本</strong></div>
-    </div>
-  </div>
-</div>
-
 <!-- Mode toggle -->
 <div class="mode-bar">
   <button class="mode-btn active" id="btn-user" onclick="setMode('user')">📱 球友端</button>
   <button class="mode-btn" id="btn-admin" onclick="setMode('admin')">🖥 球場端</button>
 </div>
-<p class="mode-hint">兩個視角看完，才是完整故事</p>
 
 <!-- ═══════════ USER FLOW ═══════════ -->
 <div class="screen" id="screen-user">
