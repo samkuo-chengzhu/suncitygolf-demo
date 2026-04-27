@@ -1435,13 +1435,12 @@ const steps = [
     ],
   },
   {
-    narr: { title:'⑤ 電子憑證（含 QR Code）', desc:'付款成功後自動發送電子憑證。球友到場出示 QR Code，工作人員一鍵核銷，完全取代紙本記錄。' },
+    narr: { title:'⑤ 電子憑證（含 QR Code）', desc:'付款成功後，系統自動把電子憑證推送到球友的 LINE。球友到場只需出示這張 QR Code 即可入場，免帶紙本。' },
     hl: null,
-    next: '查看管理端 →',
     annotations: [
       { side: 'right', y: 110, text: '🎫 報名成功電子憑證\n自動發送到 LINE' },
       { side: 'left', y: 250, text: '📞 留聯繫電話\n颱風假時球場主動通知' },
-      { side: 'right', y: 380, text: '📲 QR Code\n到場掃碼核銷用' },
+      { side: 'right', y: 380, text: '📲 QR Code\n到場出示即可入場' },
     ],
     isLast: true,
     build: () => [
@@ -1659,11 +1658,9 @@ function renderStep() {
   const prevBtn = document.getElementById('prev-btn');
   const nextBtn = document.getElementById('next-btn');
   prevBtn.style.visibility = cur === 0 ? 'hidden' : 'visible';
+  nextBtn.style.visibility = s.isLast ? 'hidden' : 'visible';
 
-  if (s.isLast) {
-    nextBtn.textContent = '查看管理端 →';
-    nextBtn.onclick = () => setMode('admin');
-  } else {
+  if (!s.isLast) {
     nextBtn.textContent = s.next || '繼續 →';
     nextBtn.onclick = nextStep;
   }
