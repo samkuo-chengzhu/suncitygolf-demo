@@ -915,6 +915,57 @@ body {
 .success-amount { font-size: 22px; font-weight: 700; color: var(--green-mid); margin-top: 6px; }
 .success-method { font-size: 11px; color: var(--text-light); margin-top: 4px; }
 
+/* Admin mode — body theme switch */
+body { transition: background-color 0.35s ease; }
+body.admin-mode { background: #F2EDE0; }
+body.admin-mode .brand-header h1 { color: var(--green-dark); }
+body.admin-mode .brand-header .subtitle { color: rgba(0,0,0,0.5); }
+body.admin-mode .brand-header .eyebrow { color: #B8860B; }
+body.admin-mode .mode-bar { border-color: rgba(0,0,0,0.15); }
+body.admin-mode .mode-btn { color: rgba(0,0,0,0.55); }
+body.admin-mode .mode-btn.active { background: var(--green-mid); color: white; }
+body.admin-mode .narration {
+  background: white;
+  border-left-color: var(--green-mid);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+body.admin-mode .narr-tag { color: var(--green-mid); }
+body.admin-mode .narr-title { color: var(--green-dark); }
+body.admin-mode .narr-desc { color: var(--text-mid); }
+body.admin-mode .section-label { color: var(--text-light); }
+body.admin-mode .erp-note { color: rgba(0,0,0,0.45); }
+
+/* Admin top dashboard bar */
+.dash-bar {
+  background: linear-gradient(135deg, #1A5C35, #0D3B22);
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(13, 59, 34, 0.18);
+}
+.dash-icon {
+  font-size: 16px;
+  background: rgba(255,255,255,0.15);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.dash-text { flex: 1; min-width: 0; }
+.dash-title { color: white; font-size: 13px; font-weight: 700; letter-spacing: 0.3px; }
+.dash-sub { color: rgba(255,255,255,0.6); font-size: 9px; margin-top: 1px; }
+.dash-status {
+  font-size: 9px;
+  color: #6FE198;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 /* Utility */
 .hidden { display: none; }
 .screen { display: flex; flex-direction: column; align-items: center; width: 100%; }
@@ -997,6 +1048,16 @@ body {
 <!-- ═══════════ ADMIN PANEL ═══════════ -->
 <div class="screen hidden" id="screen-admin">
   <div class="admin">
+    <!-- Admin top bar -->
+    <div class="dash-bar">
+      <span class="dash-icon">🖥</span>
+      <div class="dash-text">
+        <div class="dash-title">山溪地 · 管理後台</div>
+        <div class="dash-sub">櫃台 · 王小明 值班中</div>
+      </div>
+      <span class="dash-status">● 連線中</span>
+    </div>
+
     <!-- Session header -->
     <div class="a-card">
       <div class="a-head">
@@ -1084,7 +1145,7 @@ body {
           <p class="dt-sub">5/2（六）早場 18洞 · 07:00 開球</p>
           <div class="dt-rows">
             <div class="dt-row"><span class="k">人數</span><span class="v">2 人</span></div>
-            <div class="dt-row"><span class="k">已付訂金</span><span class="v" style="color:var(--green-mid);">NT$1,000</span></div>
+            <div class="dt-row"><span class="k">已付訂金</span><span class="v" style="color:var(--green-mid);">NT$2,000</span></div>
             <div class="dt-row"><span class="k">訂單編號</span><span class="v" style="font-family:monospace;font-size:11px;">SG260502-0038</span></div>
           </div>
         </div>
@@ -1098,10 +1159,10 @@ body {
         </div>
         <div class="settle-body">
           <div class="st-row"><span class="k">擊球費（假日）NT$3,500 × 2</span><span class="v">NT$7,000</span></div>
-          <div class="st-row"><span class="k">已付訂金抵扣</span><span class="v" style="color:var(--green-mid);">−NT$1,000</span></div>
+          <div class="st-row"><span class="k">已付訂金抵扣（1 組）</span><span class="v" style="color:var(--green-mid);">−NT$2,000</span></div>
           <div class="st-row balance">
             <span class="k">應收餘額</span>
-            <span class="v"><strong>NT$6,000</strong></span>
+            <span class="v"><strong>NT$5,000</strong></span>
           </div>
         </div>
         <p class="pm-label">選擇付款方式</p>
@@ -1116,7 +1177,7 @@ body {
         <div class="success-icon">✓</div>
         <h3 class="success-title">結帳完成</h3>
         <p class="success-name">張偉強 × 2人</p>
-        <p class="success-amount">NT$6,000</p>
+        <p class="success-amount">NT$5,000</p>
         <p class="success-method" id="success-method">現金</p>
       </div>
     </div>
@@ -1125,12 +1186,17 @@ body {
 
 <script>
 /* ─── Data ─── */
+let formState = { name: '林志明', phone: '0912-345-678', pax: 4 };
+
+const DEPOSIT_PER_GROUP = 2000;
+const GREEN_FEE_PER_PERSON = 3500;
+
 const players = [
   { name:'林志明', init:'林', count:4, deposit:2000, status:'checkin' },
-  { name:'王建國', init:'王', count:2, deposit:1000, status:'checkin' },
-  { name:'陳美華', init:'陳', count:2, deposit:1000, status:'checkin' },
-  { name:'張偉強', init:'張', count:2, deposit:1000, status:'paid' },
-  { name:'劉明宏', init:'劉', count:2, deposit:1000, status:'paid' },
+  { name:'王建國', init:'王', count:2, deposit:2000, status:'checkin' },
+  { name:'陳美華', init:'陳', count:2, deposit:2000, status:'checkin' },
+  { name:'張偉強', init:'張', count:2, deposit:2000, status:'paid' },
+  { name:'劉明宏', init:'劉', count:2, deposit:2000, status:'paid' },
   { name:'黃志豪', init:'黃', count:2, deposit: 0,   status:'pending' },
 ];
 
@@ -1171,7 +1237,7 @@ const steps = [
     hl: null,
     next: 'LINE Pay 付款 →',
     build: () => [
-      usr('確認報名 — 林志明 × 4人'),
+      usr(`確認報名 — ${formState.name} × ${formState.pax}人`),
       bot('✅ 確認完成，請支付訂金：'),
       cardWrap(depositCard()),
     ],
@@ -1249,36 +1315,44 @@ function calendarCard() {
 }
 
 function formCard() {
+  const sel = (n) => formState.pax === n ? ' sel' : '';
   return `<div class="form-card">
     <div class="form-head">
       <p>⛳ 5月2日早場報名</p>
       <small>07:00 開球 · 18洞標準賽</small>
     </div>
     <div class="form-body">
-      <div><div class="f-label">姓名</div><div class="f-val">林志明</div></div>
-      <div><div class="f-label">電話</div><div class="f-val">0912-345-678</div></div>
+      <div>
+        <div class="f-label">姓名</div>
+        <input class="f-input" type="text" value="${formState.name}" oninput="updateForm('name', this.value)" placeholder="請填寫您的姓名" />
+      </div>
+      <div>
+        <div class="f-label">聯繫電話</div>
+        <input class="f-input" type="tel" value="${formState.phone}" oninput="updateForm('phone', this.value)" placeholder="0912-345-678" />
+      </div>
       <div>
         <div class="f-label">報名人數</div>
         <div class="pax-row">
-          <button class="pax-btn" onclick="setPax(1,this)">1</button>
-          <button class="pax-btn" onclick="setPax(2,this)">2</button>
-          <button class="pax-btn" onclick="setPax(3,this)">3</button>
-          <button class="pax-btn sel" id="pax4" onclick="setPax(4,this)">4</button>
+          <button class="pax-btn${sel(1)}" onclick="setPax(1,this)">1</button>
+          <button class="pax-btn${sel(2)}" onclick="setPax(2,this)">2</button>
+          <button class="pax-btn${sel(3)}" onclick="setPax(3,this)">3</button>
+          <button class="pax-btn${sel(4)}" onclick="setPax(4,this)">4</button>
         </div>
       </div>
-      <div class="deposit-preview">訂金：NT$500 × 4人 = <strong id="dep-preview">NT$2,000</strong></div>
+      <div class="deposit-preview">1 組訂金（含最多 4 人）：<strong>NT$2,000</strong></div>
       <button class="fc-cta" onclick="nextStep()">確認報名</button>
     </div>
   </div>`;
 }
 
-let selectedPax = 4;
 function setPax(n, el) {
-  selectedPax = n;
+  formState.pax = n;
   document.querySelectorAll('.pax-btn').forEach(b => b.classList.remove('sel'));
   el.classList.add('sel');
-  const prev = document.getElementById('dep-preview');
-  if (prev) prev.textContent = `NT$${(500*n).toLocaleString()}`;
+}
+
+function updateForm(field, val) {
+  formState[field] = val;
 }
 
 function depositCard() {
@@ -1286,8 +1360,8 @@ function depositCard() {
     <div class="dep-head"><span>💳</span><p>訂金付款確認</p></div>
     <div class="dep-body">
       <div class="dep-row"><span class="k">場次</span><span class="v">5/2（六）早場 18洞</span></div>
-      <div class="dep-row"><span class="k">報名人數</span><span class="v">4 人</span></div>
-      <div class="dep-row"><span class="k">訂金單價</span><span class="v">NT$500／人</span></div>
+      <div class="dep-row"><span class="k">報名人數</span><span class="v">${formState.pax} 人（1 組）</span></div>
+      <div class="dep-row"><span class="k">訂金</span><span class="v">NT$2,000 / 組</span></div>
       <div class="dep-row"><span class="k">抵扣方式</span><span class="v" style="color:var(--green-mid);">✓ 到場抵擊球費</span></div>
       <div class="dep-total">
         <span class="tl">應付訂金</span>
@@ -1311,8 +1385,9 @@ function voucherCard() {
     <div class="vc-mid">
       <div class="vc-row"><span class="k">場次</span><span class="v">5/2（六）早場 07:00</span></div>
       <div class="vc-row"><span class="k">球道</span><span class="v">18洞標準賽</span></div>
-      <div class="vc-row"><span class="k">球友</span><span class="v">林志明</span></div>
-      <div class="vc-row"><span class="k">人數</span><span class="v">4 人</span></div>
+      <div class="vc-row"><span class="k">球友</span><span class="v">${formState.name}</span></div>
+      <div class="vc-row"><span class="k">聯繫電話</span><span class="v">${formState.phone}</span></div>
+      <div class="vc-row"><span class="k">人數</span><span class="v">${formState.pax} 人</span></div>
       <div class="vc-row"><span class="k">已付訂金</span><span class="v" style="color:var(--green-mid);">NT$2,000</span></div>
       <div class="vc-row"><span class="k">訂單編號</span><span class="v" style="font-family:monospace;font-size:9px;">SG260502-0042</span></div>
     </div>
@@ -1408,6 +1483,7 @@ function setMode(mode) {
   document.getElementById('screen-admin').className = 'screen' + (isUser ? ' hidden' : '');
   document.getElementById('btn-user').className = 'mode-btn' + (isUser ? ' active' : '');
   document.getElementById('btn-admin').className = 'mode-btn' + (isUser ? '' : ' active');
+  document.body.classList.toggle('admin-mode', !isUser);
 }
 
 /* ─── Admin: render players ─── */
@@ -1431,9 +1507,12 @@ function renderPlayers() {
   const ci = players.filter(p=>p.status==='checkin').reduce((s,p)=>s+p.count,0);
   const pd = players.filter(p=>p.status==='paid').reduce((s,p)=>s+p.count,0);
   const pe = players.filter(p=>p.status==='pending').reduce((s,p)=>s+p.count,0);
+  const totalDep = players.reduce((s,p)=>s+p.deposit,0);
   document.getElementById('stat-ci').textContent = ci;
   document.getElementById('stat-paid').textContent = pd;
   document.getElementById('stat-pend').textContent = pe;
+  const dsAmt = document.querySelector('.ds-amount');
+  if (dsAmt) dsAmt.textContent = `NT$ ${totalDep.toLocaleString()}`;
 }
 
 function checkin(i) {
